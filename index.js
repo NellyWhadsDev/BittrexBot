@@ -36,13 +36,12 @@ app.post('/webhook', function(req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-        console.log(event);
         if (event.postback) {
           receivedPostback(event);
         } else if (event.message) {
           receivedMessage(event);
         } else {
-          console.log("Webhook received unknown event.");
+          console.log("Webhook received unknown event: ", event);
         }
       });
     });
@@ -59,6 +58,16 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d at %d with payload:", 
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(payload));
+
+  switch (payload) {
+    case 'TEST_BUTTON':
+      sendTestButtonMessage(senderID);
+      break;
+    
+    default:
+      sendErrorMessage(senderID);
+      console.log("Unknown payload in postback: ", event);
+  }
 }
   
 function receivedMessage(event) {
@@ -93,8 +102,34 @@ function receivedMessage(event) {
   }
 }
 
-function sendGenericMessage(recipientId, messageText) {
+function sendGenericMessage(recipientId) {
   // To be expanded in later sections
+}
+
+function sendTestButtonMessage(recipientId) {
+    var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: "You found the test button!"
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function sendErrorMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: "We're sorry, something seems to have gone wrong on our end."
+    }
+  }; 
+
+  callSendAPI(messageData);
 }
 
 function sendTextMessage(recipientId, messageText) {
