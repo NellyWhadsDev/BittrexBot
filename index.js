@@ -156,6 +156,7 @@ function callSendAPI(messageData) {
     if (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
+      console.log("What even is this: ", body);
 
       console.log("Successfully sent generic message with id %s to recipient %s", 
         messageId, recipientId);
