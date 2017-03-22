@@ -36,6 +36,9 @@ app.post('/webhook', function(req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
+        if (event.postback) {
+          recievedPostback(event);
+        }
         if (event.message) {
           receivedMessage(event);
         } else {
@@ -46,6 +49,17 @@ app.post('/webhook', function(req, res) {
     res.sendStatus(200);
   }
 });
+
+function receivedPostback(event) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfMessage = event.timestamp;
+  var payload = event.postback.payload;
+
+  console.log("Received postback for user %d and page %d at %d with payload:", 
+    senderID, recipientID, timeOfMessage);
+  console.log(JSON.stringify(payload));
+}
   
 function receivedMessage(event) {
   var senderID = event.sender.id;
