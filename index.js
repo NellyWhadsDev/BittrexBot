@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 
+var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
+
 app.set('port', process.env.PORT || 5000);
 
 app.get('/', function (req, res) {
