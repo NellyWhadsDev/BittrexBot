@@ -90,9 +90,10 @@ function receivedMessage(event) {
     // If we receive a text message, check to see if it matches a keyword
     // and send back the example. Otherwise, just echo the text we received.
     switch (messageText) {
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
+      // Example: Handle message with exact text
+      // case 'generic':
+      //   sendGenericMessage(senderID);
+      //   break;
 
       default:
         sendTextMessage(senderID, messageText);
@@ -100,10 +101,6 @@ function receivedMessage(event) {
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
-}
-
-function sendGenericMessage(recipientId) {
-  // To be expanded in later sections
 }
 
 function sendTestButtonMessage(recipientId) {
@@ -157,8 +154,9 @@ function callSendAPI(messageData) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
 
-      console.log("Successfully sent message with id %s to recipient %s with content %s", 
-        messageId, recipientId, messageData.message.text);
+      // Logging unnecessary at the moment
+      // console.log("Successfully sent message with id %s to recipient %s with content \"%s\"", 
+      //   messageId, recipientId, messageData.message.text);
     } else {
       console.error("Unable to send message.");
       console.error(response);
