@@ -123,6 +123,7 @@ function sendBalanceButtonMessage(recipientId, data) {
   wallets.forEach(function(wallet) {
     messageText += "\n" + wallet.Currency + " - " + wallet.Available;
   }, function(messageText) {
+    console.log("Message should say: ", messageText);
     var messageData = {
       recipient: {
         id: recipientId
