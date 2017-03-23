@@ -119,7 +119,13 @@ function receivedMessage(event) {
 
 function sendBalanceButtonMessage(recipientId, data) {
   var wallets = data.result;
-  var messageText = columnify(wallets, {columns: ['Currency', 'Available', 'Pending']});
+  var messageText = columnify(wallets, {
+    columns: ['Currency', 'Available', 'Pending'],
+    config: {
+      Available: {align: right},
+      Pending: {align: right}
+    }
+  });
   console.log("Message should say: ", messageText);
   var messageData = {
     recipient: {
