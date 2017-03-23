@@ -68,10 +68,9 @@ function receivedPostback(event) {
 
   switch (payload) {
     case 'BALANCE_BUTTON_POSTBACK':
-      bittrex.getbalances(function(data) {
-        console.log("Balance data: ", data);
-        if (data != null) {
-          sendBalanceButtonMessage(senderID, data);
+      bittrex.getbalances(function(res) {
+        if (res.success == true) {
+          sendBalanceButtonMessage(senderID, res);
         } else {
           sendErrorMessage(senderID);
         }
@@ -118,16 +117,23 @@ function receivedMessage(event) {
 }
 
 function sendBalanceButtonMessage(recipientId, data) {
-    var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: "You found the test button!"
-    }
-  };
+  var wallets = data.result;
+  var messageText = "Wallets and available balances:";
 
-  callSendAPI(messageData);
+  wallets.forEach(function(wallet) {
+    messageText += "\n" + wallet.Currency + " - " + wallet.Available;
+  }, function(messageText) {
+    var messageData = {
+      recipient: {
+        id: recipientId
+      },
+      message: {
+        text: messageText
+      }
+    };
+
+    callSendAPI(messageData);
+  });
 }
 
 function sendErrorMessage(recipientId) {
