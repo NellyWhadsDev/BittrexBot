@@ -1,3 +1,4 @@
+var columnify = require('columnify');
 var bittrex = require('node.bittrex.api');
 var request = require('request');
 var bodyParser = require('body-parser');
@@ -118,10 +119,7 @@ function receivedMessage(event) {
 
 function sendBalanceButtonMessage(recipientId, data) {
   var wallets = data.result;
-  var messageText = "Wallets and available balances:";
-  wallets.forEach(function(wallet) {
-    messageText += "\n" + wallet.Currency + " - " + wallet.Available;
-  });
+  var messageText = columnify(wallets, {columns: ['Currency', 'Available', 'Pending']});
   console.log("Message should say: ", messageText);
   var messageData = {
     recipient: {

@@ -20,6 +20,7 @@
   "homepage": "https://github.com/nellywhadsdev/bittrexbot#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "columnify": "^1.5.4",
     "express": "^4.15.2",
     "node.bittrex.api": "^0.2.2",
     "request": "^2.81.0"
