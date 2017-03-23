@@ -1,3 +1,4 @@
+var bittrex = require('node.bittrex.api');
 var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
@@ -6,6 +7,12 @@ var app = express();
 var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
 
 var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD';
+
+bittrex.options({
+    'apikey' :'6fba4b689f154a1ca82a20ce79e5e8c6',
+    'apisecret' :'cd0a5fbeae38427cb3e362ef715ecf61',
+    'verbose' : true
+});
 
 app.set('port', process.env.PORT || 5000);
 
@@ -60,8 +67,15 @@ function receivedPostback(event) {
   console.log(JSON.stringify(payload));
 
   switch (payload) {
-    case 'TEST_BUTTON':
-      sendTestButtonMessage(senderID);
+    case 'BALANCE_BUTTON_POSTBACK':
+      bittrex.getbalances(function(data) {
+        console.log("Balance data: ", data);
+        if (data != null) {
+          sendBalanceButtonMessage(senderID, data);
+        } else {
+          sendErrorMessage(senderID);
+        }
+      });
       break;
     
     default:
@@ -103,7 +117,7 @@ function receivedMessage(event) {
   }
 }
 
-function sendTestButtonMessage(recipientId) {
+function sendBalanceButtonMessage(recipientId, data) {
     var messageData = {
     recipient: {
       id: recipientId
