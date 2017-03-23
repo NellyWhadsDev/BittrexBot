@@ -119,7 +119,7 @@ function receivedMessage(event) {
 function sendBalanceButtonMessage(recipientId, data) {
   var wallets = data.result;
   var messageText = "Wallets and available balances:";
-
+  console.log("sendBalanceButtonMessage got: ", wallets);
   wallets.forEach(function(wallet) {
     messageText += "\n" + wallet.Currency + " - " + wallet.Available;
   }, function(messageText) {
