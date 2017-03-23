@@ -120,21 +120,19 @@ function sendBalanceButtonMessage(recipientId, data) {
   var wallets = data.result;
   var messageText = "Wallets and available balances:";
   wallets.forEach(function(wallet) {
-    console.log("sendBalanceButtonMessage got: ", JSON.stringify(wallet));
     messageText += "\n" + wallet.Currency + " - " + wallet.Available;
-  }, function(messageText) {
-    console.log("Message should say: ", messageText);
-    var messageData = {
-      recipient: {
-        id: recipientId
-      },
-      message: {
-        text: messageText
-      }
-    };
-
-    callSendAPI(messageData);
   });
+  console.log("Message should say: ", messageText);
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText
+    }
+  };
+
+  callSendAPI(messageData);
 }
 
 function sendErrorMessage(recipientId) {
