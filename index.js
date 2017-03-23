@@ -19,15 +19,13 @@ app.set('port', process.env.PORT || 5000);
 // Process application/json
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) {
-    res.send('Hey, I\'m a chatbot for Bittrex.');
-});
+app.get('/', function(req, res) { res.send('Hey, I\'m a chatbot for Bittrex.'); });
 
 app.get('/webhook', function(req, res) {
     if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
-        res.send(req.query['hub.challenge'])
+        res.send(req.query['hub.challenge']);
     }
-    res.send('Error, wrong token')
+    res.send('Error, wrong token');
 });
 
 app.post('/webhook', function(req, res) {
@@ -38,18 +36,12 @@ app.post('/webhook', function(req, res) {
 
     // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
-      var pageID = entry.id;
-      var timeOfEvent = entry.time;
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-        if (event.postback) {
-          receivedPostback(event);
-        } else if (event.message) {
-          receivedMessage(event);
-        } else {
-          console.log("Webhook received unknown event: ", event);
-        }
+        if (event.postback) { receivedPostback(event); } 
+        else if (event.message) { receivedMessage(event); } 
+        else { console.log("Webhook received unknown event: ", event); }
       });
     });
     res.sendStatus(200);
@@ -62,9 +54,7 @@ function receivedPostback(event) {
   var timeOfMessage = event.timestamp;
   var payload = event.postback.payload;
 
-  console.log("Received postback for user %d and page %d at %d with payload:", 
-    senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(payload));
+  console.log("Received postback for user %d and page %d at %d with payload: /n", senderID, recipientID, timeOfMessage, JSON.stringify(payload));
 
   switch (payload) {
     case 'BALANCE_BUTTON_POSTBACK':
@@ -73,6 +63,7 @@ function receivedPostback(event) {
           sendBalanceButtonMessage(senderID, res);
         } else {
           sendErrorMessage(senderID);
+          console.log("API call unsuccessful: ", res);
         }
       });
       break;
@@ -89,11 +80,7 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  console.log("Received message for user %d and page %d at %d with message:", 
-    senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(message));
-
-  var messageId = message.mid;
+  console.log("Received message for user %d and page %d at %d with message: /n", senderID, recipientID, timeOfMessage, JSON.stringify(message));
 
   var messageText = message.text;
   var messageAttachments = message.attachments;
@@ -109,7 +96,7 @@ function receivedMessage(event) {
       //   break;
 
       default:
-        sendTextMessage(senderID, messageText);
+        sendTextMessage(senderID, "Echo!\n" + messageText);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
@@ -122,40 +109,17 @@ function sendBalanceButtonMessage(recipientId, data) {
   wallets.forEach(function(wallet) {
     messageText += "\n" + wallet.Currency + " - " + wallet.Available;
   });
-  console.log("Message should say: ", messageText);
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: messageText
-    }
-  };
-
-  callSendAPI(messageData);
+  sendTextMessage(recipientId, messageText);
 }
 
 function sendErrorMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: "We're sorry, something seems to have gone wrong on our end."
-    }
-  }; 
-
-  callSendAPI(messageData);
+  sendTextMessage(recipientId, "We're sorry, something seems to have gone wrong on our end.");
 }
 
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: messageText
-    }
+    recipient: {id: recipientId},
+    message: {text: messageText}
   };
 
   callSendAPI(messageData);
@@ -164,18 +128,15 @@ function sendTextMessage(recipientId, messageText) {
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
+    qs: {access_token: PAGE_ACCESS_TOKEN},
     method: 'POST',
     json: messageData
 
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
       // Logging unnecessary at the moment
       // console.log("Successfully sent message with id %s to recipient %s with content \"%s\"", 
-      //   messageId, recipientId, messageData.message.text);
+      //   body.message_id, body.recipient_id, messageData.message.text);
     } else {
       console.error("Unable to send message.");
       console.error(response);
