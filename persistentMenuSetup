@@ -9,3 +9,17 @@ curl -X POST -H "Content-Type: application/json" -d '{
     }
   ]
 }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD"
+
+# Wit.ai Coins entity setup example
+curl -XPUT 'https://api.wit.ai/entities/Coins?v=20160526' \
+  -H 'Authorization: Bearer $TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"doc":"Here are the supported coins",
+       "values":[
+       {"value":"BTC",
+        "expressions":["BTC",
+                       "BITCOIN"]},
+       {"value":"DAR",
+       "expressions":["DAR",
+                      "DARIUS"]}]}'
+                      
