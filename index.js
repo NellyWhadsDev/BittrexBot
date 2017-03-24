@@ -1,3 +1,4 @@
+var firebase = require('firebase');
 var bittrex = require('node.bittrex.api');
 var request = require('request');
 var bodyParser = require('body-parser');
@@ -7,6 +8,11 @@ var app = express();
 var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
 
 var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD';
+
+firebase.initializeApp({
+  apiKey: "AIzaSyCN1Kgxc2POrVr2UM6QogYzxF7yQe9uyDI",
+  databaseURL: "https://bittrexbot.firebaseio.com"
+});
 
 bittrex.options({
     'apikey' :'6fba4b689f154a1ca82a20ce79e5e8c6',
@@ -19,7 +25,7 @@ app.set('port', process.env.PORT || 5000);
 // Process application/json
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) { res.send('Hey, I\'m a chatbot for Bittrex.'); });
+app.get('/', function(req, res) { res.redirect('https://bittrex.com'); });
 
 app.get('/webhook', function(req, res) {
     if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
