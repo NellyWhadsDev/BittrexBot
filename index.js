@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 
+var PAGE_ID = '236820823391221';
+
 var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
 
 var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD';
@@ -37,9 +39,8 @@ app.get('/webhook', function(req, res) {
 app.post('/webhook', function(req, res) {
   var data = req.body;
 
-  // Make sure this is a page subscription
-  if (data.object === 'page') {
-    console.log(data.entry);
+  // Make sure this is our page's subscription
+  if (data.object === 'page' && data.entry.id === PAGE_ID) {
 
     // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
