@@ -11,13 +11,14 @@ var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZB
 
 firebase.initializeApp({
   apiKey: "AIzaSyCN1Kgxc2POrVr2UM6QogYzxF7yQe9uyDI",
+  authDomain: "bittrexbot.firebaseapp.com",
   databaseURL: "https://bittrexbot.firebaseio.com"
 });
 
 bittrex.options({
-    'apikey' :'6fba4b689f154a1ca82a20ce79e5e8c6',
-    'apisecret' :'cd0a5fbeae38427cb3e362ef715ecf61',
-    'verbose' : true
+  'apikey' :'6fba4b689f154a1ca82a20ce79e5e8c6',
+  'apisecret' :'cd0a5fbeae38427cb3e362ef715ecf61',
+  'verbose' : true
 });
 
 app.set('port', process.env.PORT || 5000);
@@ -28,13 +29,17 @@ app.use(bodyParser.json());
 app.get('/', function(req, res) { res.redirect('https://bittrex.com'); });
 
 app.get('/webhook', function(req, res) {
-    if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
-        res.send(req.query['hub.challenge']);
-    }
-    res.send('Error, wrong token');
+  if (req.query['hub.verify_token']) {
+    res.send((verifyMessengerRequest(req.query['hub.verify_token'])) ? req.query['hub.challenge'] : 'Invalid token');
+  }
 });
 
 app.post('/webhook', function(req, res) {
+  if (req.query['hub.verify_token'] != VERIFY_TOKEN) {
+    //Request didn't come from facebook
+    console.log("Request recived without token: ", req);
+    return;
+  }
   var data = req.body;
 
   // Make sure this is a page subscription
@@ -149,6 +154,10 @@ function callSendAPI(messageData) {
       console.error(error);
     }
   });  
+}
+
+function verifyMessengerRequest(token) {
+  return (token === VERIFY_TOKEN) ? true : false;
 }
 
 app.listen(app.get('port'), function() {
