@@ -3,6 +3,7 @@ var bittrex = require('node.bittrex.api');
 var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
+var hasha = require('hasha');
 var app = express();
 
 var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
@@ -55,6 +56,12 @@ app.post('/webhook', function(req, res) {
   }
 });
 
+function userLogin(userpass) {
+  var hashedPassword = hasha(userpass)
+
+  console.log(password);
+}
+
 function receivedPostback(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -62,7 +69,7 @@ function receivedPostback(event) {
   var payload = event.postback.payload;
 
   console.log("Received postback for user %d and page %d at %d with payload: /n", senderID, recipientID, timeOfMessage, JSON.stringify(payload));
-
+  userLogin(senderID)
   switch (payload) {
     case 'BALANCE_BUTTON_POSTBACK':
       bittrex.getbalances(function(res) {
@@ -88,7 +95,7 @@ function receivedMessage(event) {
   var message = event.message;
 
   console.log("Received message for user %d and page %d at %d with message: /n", senderID, recipientID, timeOfMessage, JSON.stringify(message));
-
+  userLogin(senderID)
   var messageText = message.text;
   var messageAttachments = message.attachments;
 
