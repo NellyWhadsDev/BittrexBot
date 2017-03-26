@@ -55,7 +55,7 @@ app.post('/webhook', function(req, res) {
     });
     res.sendStatus(200);
   }
-  console.log(data.entry.id, " ", PAGE_ID);
+  console.log(data, " ", PAGE_ID);
 });
 
 function userLogin(userpass) {
