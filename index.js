@@ -14,13 +14,14 @@ var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZB
 
 firebase.initializeApp({
   apiKey: "AIzaSyCN1Kgxc2POrVr2UM6QogYzxF7yQe9uyDI",
-  databaseURL: "https://bittrexbot.firebaseio.com"
+  authDomain : "bittrexbot.firebaseapp.com",
+  databaseURL: "https://bittrexbot.firebaseio.com"
 });
 
 bittrex.options({
-    'apikey' :'6fba4b689f154a1ca82a20ce79e5e8c6',
-    'apisecret' :'cd0a5fbeae38427cb3e362ef715ecf61',
-    'verbose' : true
+  'apikey' : '6fba4b689f154a1ca82a20ce79e5e8c6',
+  'apisecret' : 'cd0a5fbeae38427cb3e362ef715ecf61',
+  'verbose' : true
 });
 
 app.set('port', process.env.PORT || 5000);
