@@ -167,12 +167,15 @@ function callSendAPI(messageData) {
 function userLogin(uuid) {
   var email = uuid + "@facebook.com";
   var password = hasha(uuid);
-  firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-    console.log(error.code);
-    console.log(error.message);
+  firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
+    console.log("Login success: ", firebase.auth().currentUser);
+  }, function(error) {
+    if (error.code === 'auth/user-not-found') {
+      firebase.auth().createUserWithEmailAndPassword(email, password).then(function() {
+        console.log("After creation: ", firebase.auth().currentUser);
+      });
+    }
   });
-
-  console.log(firebase.auth().currentUser);
 }
 
 app.listen(app.get('port'), function() {
