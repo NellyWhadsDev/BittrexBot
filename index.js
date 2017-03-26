@@ -164,9 +164,13 @@ function callSendAPI(messageData) {
   });  
 }
 
-function userLogin(userpass) {
-  var hashedPassword = hasha(userpass);
-  console.log(hashedPassword);
+function userLogin(uuid) {
+  var email = uuid + "@facebook.com";
+  var password = hasha(uuid);
+  firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    console.log(error.code);
+    console.log(error.message);
+  });
 }
 
 app.listen(app.get('port'), function() {
