@@ -41,10 +41,15 @@ app.post('/webhook', function(req, res) {
   var data = req.body;
 
   // Make sure this is our page's subscription
-  if (data.object === 'page' && data.entry.id === PAGE_ID) {
+  if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
+
+      if (entry.id != PAGE_ID) {
+        console.log("Error, invalid page ID: ", entry.id);
+        return;
+      }
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
