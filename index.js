@@ -59,7 +59,7 @@ app.post('/webhook', function(req, res) {
 function userLogin(userpass) {
   var hashedPassword = hasha(userpass)
 
-  console.log(password);
+  console.log(hashedPassword);
 }
 
 function receivedPostback(event) {
