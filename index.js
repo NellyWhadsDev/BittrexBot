@@ -60,14 +60,7 @@ app.post('/webhook', function(req, res) {
     });
     res.sendStatus(200);
   }
-  console.log(data, " ", PAGE_ID);
 });
-
-function userLogin(userpass) {
-  var hashedPassword = hasha(userpass)
-
-  console.log(hashedPassword);
-}
 
 function receivedPostback(event) {
   var senderID = event.sender.id;
@@ -76,7 +69,9 @@ function receivedPostback(event) {
   var payload = event.postback.payload;
 
   console.log("Received postback for user %d and page %d at %d with payload: /n", senderID, recipientID, timeOfMessage, JSON.stringify(payload));
-  userLogin(senderID)
+
+  userLogin(senderID);
+  
   switch (payload) {
     case 'BALANCE_BUTTON_POSTBACK':
       bittrex.getbalances(function(res) {
@@ -102,7 +97,9 @@ function receivedMessage(event) {
   var message = event.message;
 
   console.log("Received message for user %d and page %d at %d with message: /n", senderID, recipientID, timeOfMessage, JSON.stringify(message));
-  userLogin(senderID)
+
+  userLogin(senderID);
+
   var messageText = message.text;
   var messageAttachments = message.attachments;
 
@@ -164,6 +161,11 @@ function callSendAPI(messageData) {
       console.error(error);
     }
   });  
+}
+
+function userLogin(userpass) {
+  var hashedPassword = hasha(userpass);
+  console.log(hashedPassword);
 }
 
 app.listen(app.get('port'), function() {
