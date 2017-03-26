@@ -171,6 +171,8 @@ function userLogin(uuid) {
     console.log(error.code);
     console.log(error.message);
   });
+
+  console.log(firebase.auth().currentUser);
 }
 
 app.listen(app.get('port'), function() {
