@@ -169,13 +169,24 @@ function userLogin(uuid) {
   var password = hasha(uuid);
   firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
     console.log("Login success: ", firebase.auth().currentUser);
+    updateCredentials(firebase.auth().currentUser.uid);
   }, function(error) {
     if (error.code === 'auth/user-not-found') {
       firebase.auth().createUserWithEmailAndPassword(email, password).then(function() {
         console.log("After creation: ", firebase.auth().currentUser);
+        updateCredentials(firebase.auth().currentUser.uid);
       });
     }
   });
+}
+
+function updateCredentials(firebaseUID) {
+  firebase.database().ref('users/' + firebaseUID).set({
+      key : '6fba4b689f154a1ca82a20ce79e5e8c6',
+      secret : 'cd0a5fbeae38427cb3e362ef715ecf61'
+    }).catch(function(error) {
+      console.log(error);
+    });
 }
 
 app.listen(app.get('port'), function() {
