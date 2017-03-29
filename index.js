@@ -67,7 +67,7 @@ function receivedPostback(event) {
                         sendErrorMessage(senderID);
                     }
                 });
-            }, sendErrorMessage(senderID));
+            }, function() {sendErrorMessage(senderID)});
             break;
         default:
             console.log("Unknown payload in postback: ", event);
