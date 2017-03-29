@@ -64,7 +64,7 @@ var BittrexHandler = function() {
         var email = messengerPSID + "@facebook.com";
         var password = hasha(messengerPSID);
 
-        firebase.auth().signInWithEmailAndPassword(email, password).then(callback(), function(signInError) {
+        firebase.auth().signInWithEmailAndPassword(email, password).then(function() {callback()}, function(signInError) {
             console.log('BittrexHandler firebase sign in error: ', signInError);
             error();
         });
