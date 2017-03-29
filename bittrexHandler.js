@@ -26,10 +26,10 @@ var BittrexHandler = function() {
                 }
                 signOutUser(firebaseUID, error(signOutError));
             }, function(databaseError) {
-                console.log('BittrexHandler fireabse read error for user: ', firebaseUID);
-                error(databaseError);
+                console.log('BittrexHandler firebase read error for user %s: ', firebaseUID, databaseError);
+                error();
             });
-        }, error(signInError));
+        }, error());
     };
 
     var setAPIKey = function(messengerPSID, apiKey, callback, error) {
