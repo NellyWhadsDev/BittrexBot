@@ -21,10 +21,12 @@ var BittrexHandler = function() {
             firebase.database().ref('users/' + firebaseUID).once('value', function(snapshot) {
                 var apiCredentials = snapshot.val();
                 signOutUser(firebaseUID, function() {
-                    if (apiCredentials.key != null && apiCredentials.secret != null)
+                    if (apiCredentials != null && apiCredentials.key != null && apiCredentials.secret != null)
                     {
                         callback(apiCredentials);
-                    }
+                    } else {
+                        error()
+                    };
                 }, function() {error()});
             }, function(databaseError) {
                 console.log('BittrexHandler firebase read error for user %s: ', firebaseUID, databaseError);
@@ -87,7 +89,7 @@ var BittrexHandler = function() {
     return {
         init: function(messengerPSID, callback, error) {
             getAPICredentials(messengerPSID, function(credentials) {
-                console.log('BitrexHandler initializing bittrex.api with credentials: ', credentials);
+                console.log('BittrexHandler initializing bittrex.api with credentials: ', credentials);
                 bittrex.options({
                     'apikey' : credentials.key,
                     'apisecret' : credentials.secret,
