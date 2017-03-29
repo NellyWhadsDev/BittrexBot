@@ -141,15 +141,6 @@ function callSendAPI(messageData) {
     });
 }
 
-function updateCredentials(firebaseUID) {
-    firebase.database().ref('users/' + firebaseUID).set({
-        key: '6fba4b689f154a1ca82a20ce79e5e8c6',
-        secret: 'cd0a5fbeae38427cb3e362ef715ecf61'
-    }).catch(function (error) {
-        console.log(error);
-    });
-}
-
 app.listen(app.get('port'), function () {
     console.log('running on port', app.get('port'))
 });
