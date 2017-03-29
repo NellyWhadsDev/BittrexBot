@@ -57,8 +57,6 @@ function receivedPostback(event) {
 
     console.log("Received postback for user %d and page %d at %d with payload: /n", senderID, recipientID, timeOfMessage, JSON.stringify(payload));
 
-    userLogin(senderID);
-
     switch (payload) {
         case 'BALANCE_BUTTON_POSTBACK':
             bittrexHandler.init(senderID, function() {  
@@ -151,22 +149,6 @@ function callSendAPI(messageData) {
             console.error("Unable to send message.");
             console.error(response);
             console.error(error);
-        }
-    });
-}
-
-function userLogin(uuid) {
-    var email = uuid + "@facebook.com";
-    var password = hasha(uuid);
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function () {
-        console.log("Login success: ", firebase.auth().currentUser);
-        updateCredentials(firebase.auth().currentUser.uid);
-    }, function (error) {
-        if (error.code === 'auth/user-not-found') {
-            firebase.auth().createUserWithEmailAndPassword(email, password).then(function () {
-                console.log("After creation: ", firebase.auth().currentUser);
-                updateCredentials(firebase.auth().currentUser.uid);
-            });
         }
     });
 }
