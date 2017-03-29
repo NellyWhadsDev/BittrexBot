@@ -29,7 +29,7 @@ var BittrexHandler = function() {
                 console.log('BittrexHandler firebase read error for user %s: ', firebaseUID, databaseError);
                 error();
             });
-        }, error());
+        }, function() {error()});
     };
 
     var setAPIKey = function(messengerPSID, apiKey, callback, error) {
