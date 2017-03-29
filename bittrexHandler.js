@@ -102,8 +102,8 @@ var BittrexHandler = function() {
         setkey: function(messengerPSID, apiKey, callback, error) {
             setAPIKey(messengerPSID, apiKey, function() {callback()}, function() {error()});
         },
-        setsecret: function(messengerPSID, spiSecret, callback, error) {
-            setAPISecret(messengerPSID, apiKey, function() {callback()}, function() {error()});
+        setsecret: function(messengerPSID, apiSecret, callback, error) {
+            setAPISecret(messengerPSID, apiSecret, function() {callback()}, function() {error()});
         },
         sendCustomRequest: function(request_string, callback, credentials) {
             bittrex.sendCustomRequest(request_string, callback, credentials);
