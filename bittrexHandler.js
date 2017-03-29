@@ -100,70 +100,70 @@ var BittrexHandler = function() {
             setAPISecret(messengerPSID, apiSecret, function() {callback()}, function() {error()});
         },
         sendCustomRequest: function(request_string, callback, credentials) {
-            bittrex.sendCustomRequest(request_string, function() {callback()}, credentials);
+            bittrex.sendCustomRequest(request_string, callback, credentials);
         },
         getmarkets: function(callback) {
-            bittrex.getmarkets(function() {callback()});
+            bittrex.getmarkets(callback);
         },
         getcurrencies: function(callback) {
-            bittrex.getcurrencies(function() {callback()});
+            bittrex.getcurrencies(callback);
         },
         getticker: function(options, callback) {
-            bittrex.getticker(options, function() {callback()});
+            bittrex.getticker(options, callback);
         },
         getmarketsummaries: function(callback) {
-            bittrex.getmarketsummaries(function() {callback()});
+            bittrex.getmarketsummaries(callback);
         },
         getmarketsummary: function(options, callback) {
-            bittrex.getmarketsummary(options, function() {callback()});
+            bittrex.getmarketsummary(options, callback);
         },
         getorderbook: function(options, callback) {
-            bittrex.getorderbook(options, function() {callback()});
+            bittrex.getorderbook(options, callback);
         },
         getmarkethistory: function(options, callback) {
-            bittrex.getmarkethistory(options, function() {callback()});
+            bittrex.getmarkethistory(options, callback);
         },
         buylimit: function(options, callback) {
-            bittrex.buylimit(options, function() {callback()});
+            bittrex.buylimit(options, callback);
         },
         buymarket: function(options, callback) {
-            bittrex.buymarket(options, function() {callback()});
+            bittrex.buymarket(options, callback);
         },
         selllimit: function(options, callback) {
-            bittrex.selllimit(options, function() {callback()});
+            bittrex.selllimit(options, callback);
         },
         sellmarket: function(options, callback) {
-            bittrex.sellmarket(options, function() {callback()});
+            bittrex.sellmarket(options, callback);
         },
         cancel: function(options, callback) {
-            bittrex.cancel(options, function() {callback()});
+            bittrex.cancel(options, callback);
         },
         getopenorders: function(options, callback) {
-            bittrex.getopenorders(options, function() {callback()});
+            bittrex.getopenorders(options, callback);
         },
         getbalances: function(callback) {
-            bittrex.getbalances(function() {callback()});
+            bittrex.getbalances(callback);
         },
         getbalance: function(options, callback) {
-            bittrex.getbalance(options, function() {callback()});
+            bittrex.getbalance(options, callback);
         },
         getwithdrawalhistory: function(options, callback) {
-            bittrex.getwithdrawalhistory(options, function() {callback()});
+            bittrex.getwithdrawalhistory(options, callback);
         },
         getdepositaddress: function(options, callback) {
-            bittrex.getdepositaddress(options, function() {callback()});
+            bittrex.getdepositaddress(options, callback);
         },
         getdeposithistory: function(options, callback) {
-            bittrex.getdeposithistory(options, function() {callback()});
+            bittrex.getdeposithistory(options, callback);
         },
         getorderhistory: function(options, callback) {
-            bittrex.getorderhistory(options, function() {callback()});
+            bittrex.getorderhistory(options, callback);
         },
         getorder: function(options, callback) {
-            bittrex.getorder(options, function() {callback()});
+            bittrex.getorder(options, callback);
         },
         withdraw: function(options, callback) {
-            bittrex.withdraw(options, function() {callback()});
+            bittrex.withdraw(options, callback);
         }
     };
 }();
