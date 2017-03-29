@@ -81,8 +81,7 @@ var BittrexHandler = function() {
         init: function(messengerPSID, callback, error) {
             getAPICredentials(messengerPSID, function(credentials) {bittrex.options({
                     'apikey' : credentials.key,
-                    'apisecret' : credentials.secret,
-                    'verbose' :  true
+                    'apisecret' : credentials.secret
                 });
                 callback();
             }, function() {error()});
