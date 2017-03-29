@@ -88,8 +88,6 @@ function receivedMessage(event) {
 
     console.log("Received message for user %d and page %d at %d with message: /n", senderID, recipientID, timeOfMessage, JSON.stringify(message));
 
-    userLogin(senderID);
-
     var messageText = message.text;
     var messageAttachments = message.attachments;
 
