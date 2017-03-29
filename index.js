@@ -64,16 +64,11 @@ function receivedPostback(event) {
                     if (res.success == true) {
                         sendBalanceButtonMessage(senderID, res);
                     } else {
-                        console.log("API call unsuccessful: ", res);
                         sendErrorMessage(senderID);
                     }
                 });
-            }, function(error) {
-                console.log('handlerInit error :', error);
-                sendErrorMessage(senderID);
-            });
+            }, sendErrorMessage(senderID));
             break;
-
         default:
             console.log("Unknown payload in postback: ", event);
             sendErrorMessage(senderID);
@@ -89,20 +84,15 @@ function receivedMessage(event) {
     console.log("Received message for user %d and page %d at %d with message: /n", senderID, recipientID, timeOfMessage, JSON.stringify(message));
 
     var messageText = message.text;
-    var messageAttachments = message.attachments;
-
+    var apiKeyTriggerMessage = 'apiKey: ';
+    var apiSecretTriggerMessage = 'apiSecret: ';
     if (messageText) {
-
-        // If we receive a text message, check to see if it matches a keyword
-        // and send back the example. Otherwise, just echo the text we received.
-        switch (messageText) {
-            // Example: Handle message with exact text
-            // case 'generic':
-            //   sendGenericMessage(senderID);
-            //   break;
-
-            default:
-                sendTextMessage(senderID, "Echo!\n" + messageText);
+        if(messageText.startsWith(apiKeyTriggerMessage)) {
+            bittrexHandler.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), sendTextMessage(senderID, 'API Key Updated!'), sendErrorMessage(senderID));
+        } else if(messageText.startsWith(apiSecretTriggerMessage)) {
+            bittrexHandler.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), sendTextMessage(senderID, 'API Secret Updated!'), sendErrorMessage(senderID));
+        } else {
+            sendTextMessage(senderID, 'Echo!\n' + messageText);
         }
     } else if (messageAttachments) {
         sendTextMessage(senderID, "Message with attachment received");
