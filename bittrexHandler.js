@@ -38,7 +38,7 @@ var BittrexHandler = function() {
             firebase.database().ref('users/' + firebaseUID + '/key').set(apiKey).then( function() {
                 console.log('BittrexHandler firebase set for user %s', firebaseUID);
                 callback();
-                signOutUser(firebaseUID, function() {error()});
+                signOutUser(firebaseUID/*, function() {error()}*/);
             } , function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
                 error();

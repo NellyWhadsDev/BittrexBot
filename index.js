@@ -64,10 +64,10 @@ function receivedPostback(event) {
                     if (res.success == true) {
                         sendBalanceButtonMessage(senderID, res);
                     } else {
-                        sendTextMessage(senderID, 'thereitis');
+                        sendErrorMessage(senderID);
                     }
                 });
-            }, function() {sendTextMessage(senderID, 'hereitis')});
+            }, function() {sendErrorMessage(senderID)});
             break;
         default:
             console.log("Unknown payload in postback: ", event);
