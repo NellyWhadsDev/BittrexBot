@@ -24,7 +24,7 @@ var BittrexHandler = function() {
                 {
                     callback(apiCredentials);
                 }
-                signOutUser(firebaseUID);
+                signOutUser(firebaseUID, null, function() {error()});
             }, function(databaseError) {
                 console.log('BittrexHandler firebase read error for user %s: ', firebaseUID, databaseError);
                 error();
@@ -38,7 +38,7 @@ var BittrexHandler = function() {
             firebase.database().ref('users/' + firebaseUID + '/key').set(apiKey).then( function() {
                 console.log('BittrexHandler firebase set for user %s', firebaseUID);
                 callback();
-                signOutUser(firebaseUID, function() {error()});
+                signOutUser(firebaseUID, null, function() {error()});
             } , function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
                 error();
@@ -53,7 +53,7 @@ var BittrexHandler = function() {
             firebase.database().ref('users/' + firebaseUID + '/secret').set(apiSecret).then( function() {
                 console.log('BittrexHandler firebase set for user %s', firebaseUID);
                 callback();
-                signOutUser(firebaseUID, function() {error()});
+                signOutUser(firebaseUID, null, function() {error()});
             } , function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
                 error();
