@@ -36,6 +36,7 @@ var BittrexHandler = function() {
         signInUser(messengerPSID, function() {
             var firebaseUID = firebase.auth().currentUser.uid;
             firebase.database().ref('users/' + firebaseUID + '/key').set(apiKey).then( function() {
+                console.log('BittrexHandler firebase set for user %s', firebaseUID);
                 callback();
                 signOutUser(firebaseUID, function() {error()});
             } , function(databaseError) {
@@ -50,6 +51,7 @@ var BittrexHandler = function() {
         signInUser(messengerPSID, function() {
             var firebaseUID = firebase.auth().currentUser.uid;
             firebase.database().ref('users/' + firebaseUID + '/secret').set(apiSecret).then( function() {
+                console.log('BittrexHandler firebase set for user %s', firebaseUID);
                 callback();
                 signOutUser(firebaseUID, function() {error()});
             } , function(databaseError) {
@@ -64,15 +66,21 @@ var BittrexHandler = function() {
         var email = messengerPSID + "@facebook.com";
         var password = hasha(messengerPSID);
 
-        firebase.auth().signInWithEmailAndPassword(email, password).then(function() {callback()}, function(signInError) {
-            console.log('BittrexHandler firebase sign in error: ', signInError);
+        firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
+            console.log('BittrexHandler firebase signed in for messenger user %s', messengerPSID);
+            callback();
+        }, function(signInError) {
+            console.log('BittrexHandler firebse sign in error for messenger user %s: ', messengerPSID, signInError);
             error();
         });
     };
 
-    var signOutUser = function(firebaseUID, error) {
-        firebase.auth().signOut().then(null, function(signOutError) {
-            console.log('BittrexHandler sign out error for user %s: ', firebaseUID, signOutError);
+    var signOutUser = function(firebaseUID, callback, error) {
+        firebase.auth().signOut().then(function() {
+            console.log('BittrexHandler firebase signed out of user: ', firebaseUID);
+            callback();
+        }, function(signOutError) {
+            console.log('BittrexHandler firebase sign out error for user %s: ', firebaseUID, signOutError);
             error();
         });
     };
@@ -87,13 +95,13 @@ var BittrexHandler = function() {
                     'verbose' :  true
                 });
                 callback();
-            }, error());
+            }, function() {error()});
         },
         setkey: function(messengerPSID, apiKey, callback, error) {
-            setAPIKey(messengerPSID, apiKey, callback(), error());
+            setAPIKey(messengerPSID, apiKey, function() {callback()}, function() {error()});
         },
         setsecret: function(messengerPSID, spiSecret, callback, error) {
-            setAPISecret(messengerPSID, apiKey, callback(), error());
+            setAPISecret(messengerPSID, apiKey, function() {callback()}, function() {error()});
         },
         sendCustomRequest: function(request_string, callback, credentials) {
             bittrex.sendCustomRequest(request_string, callback, credentials);
