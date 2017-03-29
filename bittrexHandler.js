@@ -25,7 +25,7 @@ var BittrexHandler = function() {
                     {
                         callback(apiCredentials);
                     } else {
-                        console.log('BittrexHandler user %s missing credentials', firebaseUID);
+                        console.log('BittrexHandler missing credentials for user %s', firebaseUID);
                         error()
                     };
                 }, function() {error()});
@@ -39,25 +39,25 @@ var BittrexHandler = function() {
     var setAPIKey = function(messengerPSID, apiKey, callback, error) {
         signInUser(messengerPSID, function() {
             var firebaseUID = firebase.auth().currentUser.uid;
-            firebase.database().ref('users/' + firebaseUID + '/key').set(apiKey).then( function() {signOutUser(firebaseUID, function() {callback()}, function() {error()});
+            firebase.database().ref('users/' + firebaseUID + '/key').set(apiKey).then( function() {
+                signOutUser(firebaseUID, function() {callback()}, function() {error()});
             }, function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
                 error();
             })
         }, function() {error()});
-
     };
 
     var setAPISecret = function(messengerPSID, apiSecret, callback, error) {
         signInUser(messengerPSID, function() {
             var firebaseUID = firebase.auth().currentUser.uid;
-            firebase.database().ref('users/' + firebaseUID + '/secret').set(apiSecret).then( function() {signOutUser(firebaseUID, function() {callback()}, function() {error()});
+            firebase.database().ref('users/' + firebaseUID + '/secret').set(apiSecret).then( function() {
+                signOutUser(firebaseUID, function() {callback()}, function() {error()});
             }, function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
                 error();
             })
         } , function() {error()});
-
     };
 
     var signInUser = function(messengerPSID, callback, error) {
@@ -71,7 +71,13 @@ var BittrexHandler = function() {
     };
 
     var signOutUser = function(firebaseUID, callback, error) {
-        firebase.auth().signOut().then(function() {callback();}, function(signOutError) {
+        firebase.auth().signOut().then(function() {
+            bittrex.options({
+                'apikey' : null,
+                'apisecret' : null
+            });
+            callback();
+        }, function(signOutError) {
             console.log('BittrexHandler firebase sign out error for user %s: ', firebaseUID, signOutError);
             error();
         });
@@ -79,7 +85,8 @@ var BittrexHandler = function() {
 
     return {
         init: function(messengerPSID, callback, error) {
-            getAPICredentials(messengerPSID, function(credentials) {bittrex.options({
+            getAPICredentials(messengerPSID, function(credentials) {
+                bittrex.options({
                     'apikey' : credentials.key,
                     'apisecret' : credentials.secret
                 });
@@ -93,73 +100,72 @@ var BittrexHandler = function() {
             setAPISecret(messengerPSID, apiSecret, function() {callback()}, function() {error()});
         },
         sendCustomRequest: function(request_string, callback, credentials) {
-            bittrex.sendCustomRequest(request_string, callback, credentials);
+            bittrex.sendCustomRequest(request_string, function() {callback()}, credentials);
         },
         getmarkets: function(callback) {
-            bittrex.getmarkets(callback);
+            bittrex.getmarkets(function() {callback()});
         },
         getcurrencies: function(callback) {
-            bittrex.getcurrencies(callback);
+            bittrex.getcurrencies(function() {callback()});
         },
         getticker: function(options, callback) {
-            bittrex.getticker(options, callback);
+            bittrex.getticker(options, function() {callback()});
         },
         getmarketsummaries: function(callback) {
-            bittrex.getmarketsummaries(callback);
+            bittrex.getmarketsummaries(function() {callback()});
         },
         getmarketsummary: function(options, callback) {
-            bittrex.getmarketsummary(options, callback);
+            bittrex.getmarketsummary(options, function() {callback()});
         },
         getorderbook: function(options, callback) {
-            bittrex.getorderbook(options, callback);
+            bittrex.getorderbook(options, function() {callback()});
         },
         getmarkethistory: function(options, callback) {
-            bittrex.getmarkethistory(options, callback);
+            bittrex.getmarkethistory(options, function() {callback()});
         },
         buylimit: function(options, callback) {
-            bittrex.buylimit(option, callback);
+            bittrex.buylimit(options, function() {callback()});
         },
         buymarket: function(options, callback) {
-            bittrec.buymarket(options, callback);
+            bittrex.buymarket(options, function() {callback()});
         },
         selllimit: function(options, callback) {
-            bittrex.selllimit(options, callback);
+            bittrex.selllimit(options, function() {callback()});
         },
         sellmarket: function(options, callback) {
-            bittrex.sellmarket(options, callback);
+            bittrex.sellmarket(options, function() {callback()});
         },
         cancel: function(options, callback) {
-            bittrex.cancel(options, callback);
+            bittrex.cancel(options, function() {callback()});
         },
         getopenorders: function(options, callback) {
-            bittrex.getopenorders(options, callback);
+            bittrex.getopenorders(options, function() {callback()});
         },
         getbalances: function(callback) {
-            bittrex.getbalances(callback);
+            bittrex.getbalances(function() {callback()});
         },
         getbalance: function(options, callback) {
-            bittrex.getbalance(options, callback);
+            bittrex.getbalance(options, function() {callback()});
         },
         getwithdrawalhistory: function(options, callback) {
-            bittrex.getwithdrawalhistory(options, callback);
+            bittrex.getwithdrawalhistory(options, function() {callback()});
         },
         getdepositaddress: function(options, callback) {
-            bittrex.getdepositaddress(options, callback);
+            bittrex.getdepositaddress(options, function() {callback()});
         },
         getdeposithistory: function(options, callback) {
-            bittrex.getdeposithistory(options, callback);
+            bittrex.getdeposithistory(options, function() {callback()});
         },
         getorderhistory: function(options, callback) {
-            bittrex.getorderhistory(options, callback);
+            bittrex.getorderhistory(options, function() {callback()});
         },
         getorder: function(options, callback) {
-            bittrex.getorder(options, callback);
+            bittrex.getorder(options, function() {callback()});
         },
         withdraw: function(options, callback) {
-            bittrex.withdraw(options, callback);
+            bittrex.withdraw(options, function() {callback()});
         }
     };
-
 }();
 
 module.exports = BittrexHandler;
