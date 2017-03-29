@@ -88,9 +88,9 @@ function receivedMessage(event) {
     var apiSecretTriggerMessage = 'apiSecret: ';
     if (messageText) {
         if(messageText.startsWith(apiKeyTriggerMessage)) {
-            bittrexHandler.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), sendTextMessage(senderID, 'API Key Updated!'), sendErrorMessage(senderID));
+            bittrexHandler.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), function() {sendTextMessage(senderID, 'API Key Updated!')}, function() {sendErrorMessage(senderID)});
         } else if(messageText.startsWith(apiSecretTriggerMessage)) {
-            bittrexHandler.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), sendTextMessage(senderID, 'API Secret Updated!'), sendErrorMessage(senderID));
+            bittrexHandler.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), function() {sendTextMessage(senderID, 'API Secret Updated!')}, function() {sendErrorMessage(senderID)});
         } else {
             sendTextMessage(senderID, 'Echo!\n' + messageText);
         }

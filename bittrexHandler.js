@@ -25,6 +25,7 @@ var BittrexHandler = function() {
                     {
                         callback(apiCredentials);
                     } else {
+                        console.log('BittrexHandler user %s missing credentials', firebaseUID);
                         error()
                     };
                 }, function() {error()});
