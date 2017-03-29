@@ -1,28 +1,14 @@
-var firebase = require('firebase');
-var bittrex = require('node.bittrex.api');
 var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
-var hasha = require('hasha');
 var app = express();
+var bittrexHandler = require('./bittrexHandler.js');
 
 var PAGE_ID = '236820823391221';
 
 var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
 
 var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD';
-
-firebase.initializeApp({
-    apiKey: "AIzaSyCN1Kgxc2POrVr2UM6QogYzxF7yQe9uyDI",
-    authDomain: "bittrexbot.firebaseapp.com",
-    databaseURL: "https://bittrexbot.firebaseio.com"
-});
-
-bittrex.options({
-    'apikey' : '6fba4b689f154a1ca82a20ce79e5e8c6',
-    'apisecret' : 'cd0a5fbeae38427cb3e362ef715ecf61',
-    'verbose' :  true
-});
 
 app.set('port', process.env.PORT || 5000);
 
@@ -75,19 +61,24 @@ function receivedPostback(event) {
 
     switch (payload) {
         case 'BALANCE_BUTTON_POSTBACK':
-            bittrex.getbalances(function (res) {
-                if (res.success == true) {
-                    sendBalanceButtonMessage(senderID, res);
-                } else {
-                    sendErrorMessage(senderID);
-                    console.log("API call unsuccessful: ", res);
-                }
+            bittrexHandler.init(senderID, function() {  
+                bittrexHandler.getbalances(function (res) {
+                    if (res.success == true) {
+                        sendBalanceButtonMessage(senderID, res);
+                    } else {
+                        console.log("API call unsuccessful: ", res);
+                        sendErrorMessage(senderID);
+                    }
+                });
+            }, function(error) {
+                console.log('handlerInit error :', error);
+                sendErrorMessage(senderID);
             });
             break;
 
         default:
-            sendErrorMessage(senderID);
             console.log("Unknown payload in postback: ", event);
+            sendErrorMessage(senderID);
     }
 }
 
