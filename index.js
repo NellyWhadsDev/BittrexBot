@@ -15,7 +15,9 @@ app.set('port', process.env.PORT || 5000);
 // Process application/json
 app.use(bodyParser.json());
 
-app.get('/', function (req, res) { res.redirect('https://bittrex.com'); });
+app.get('/', function (req, res) {
+    res.redirect('https://bittrex.com');
+});
 
 app.get('/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
@@ -34,7 +36,7 @@ app.post('/webhook', function (req, res) {
         data.entry.forEach(function (entry) {
 
             if (entry.id != PAGE_ID) {
-                console.log("Error, invalid page ID: ", entry.id);
+                console.log('Error, invalid page ID: ', entry.id);
                 return;
             }
 
@@ -42,7 +44,9 @@ app.post('/webhook', function (req, res) {
             entry.messaging.forEach(function (event) {
                 if (event.postback) { receivedPostback(event); }
                 else if (event.message) { receivedMessage(event); }
-                else { console.log("Webhook received unknown event: ", event); }
+                else { 
+                    console.log('Webhook received unknown event: ', event); 
+                }
             });
         });
         res.sendStatus(200);
@@ -55,7 +59,7 @@ function receivedPostback(event) {
     var timeOfMessage = event.timestamp;
     var payload = event.postback.payload;
 
-    console.log("Received postback for user %d and page %d at %d with payload: /n", senderID, recipientID, timeOfMessage, JSON.stringify(payload));
+    console.log('Received postback for user %d and page %d at %d with payload: \n', senderID, recipientID, timeOfMessage, JSON.stringify(payload));
 
     switch (payload) {
         case 'BALANCE_BUTTON_POSTBACK':
@@ -63,14 +67,12 @@ function receivedPostback(event) {
                 bittrexHandler.getbalances(function (res) {
                     if (res.success == true) {
                         sendBalanceButtonMessage(senderID, res);
-                    } else {
-                        sendErrorMessage(senderID);
-                    }
+                    } else {sendErrorMessage(senderID)}
                 });
             }, function() {sendErrorMessage(senderID)});
             break;
         default:
-            console.log("Unknown payload in postback: ", event);
+            console.log('Unknown payload in postback: ', event);
             sendErrorMessage(senderID);
     }
 }
@@ -81,44 +83,46 @@ function receivedMessage(event) {
     var timeOfMessage = event.timestamp;
     var message = event.message;
 
-    console.log("Received message for user %d and page %d at %d with message: /n", senderID, recipientID, timeOfMessage, JSON.stringify(message));
+    console.log('Received message for user %d and page %d at %d with message: \n', senderID, recipientID, timeOfMessage, JSON.stringify(message));
 
     var messageText = message.text;
     var apiKeyTriggerMessage = 'apiKey: ';
     var apiSecretTriggerMessage = 'apiSecret: ';
     if (messageText) {
         if(messageText.startsWith(apiKeyTriggerMessage)) {
-            bittrexHandler.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), function() {sendTextMessage(senderID, 'API Key Updated!')}, function() {sendErrorMessage(senderID)});
+            bittrexHandler.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), function() {
+                sendTextMessage(senderID, 'API Key Updated!');
+            }, function() {sendErrorMessage(senderID)});
         } else if(messageText.startsWith(apiSecretTriggerMessage)) {
-            bittrexHandler.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), function() {sendTextMessage(senderID, 'API Secret Updated!')}, function() {sendErrorMessage(senderID)});
+            bittrexHandler.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), function() {
+                sendTextMessage(senderID, 'API Secret Updated!')
+            }, function() {sendErrorMessage(senderID)});
         } else {
             sendTextMessage(senderID, 'Echo!\n' + messageText);
         }
     } else if (messageAttachments) {
-        sendTextMessage(senderID, "Message with attachment received");
+        sendTextMessage(senderID, 'Message with attachment received');
     }
 }
 
 function sendBalanceButtonMessage(recipientId, data) {
     var wallets = data.result;
-    var messageText = "Wallets and available balances:";
+    var messageText = 'Wallets and available balances:';
     wallets.forEach(function (wallet) {
-        messageText += "\n" + wallet.Currency + " - " + wallet.Available;
+        messageText += '\n' + wallet.Currency + ' - ' + wallet.Available;
     });
     sendTextMessage(recipientId, messageText);
 }
 
 function sendErrorMessage(recipientId) {
-    sendTextMessage(recipientId, "We're sorry, something seems to have gone wrong on our end.");
+    sendTextMessage(recipientId, 'We\'re sorry, something seems to have gone wrong on our end.');
 }
 
 function sendTextMessage(recipientId, messageText) {
-    var messageData = {
+    callSendAPI({
         recipient: { id: recipientId },
         message: { text: messageText }
-    };
-
-    callSendAPI(messageData);
+    });
 }
 
 function callSendAPI(messageData) {
@@ -127,14 +131,9 @@ function callSendAPI(messageData) {
         qs: { access_token: PAGE_ACCESS_TOKEN },
         method: 'POST',
         json: messageData
-
     }, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            // Logging unnecessary at the moment
-            // console.log("Successfully sent message with id %s to recipient %s with content \"%s\"",
-            //   body.message_id, body.recipient_id, messageData.message.text);
-        } else {
-            console.error("Unable to send message.");
+        if (error || response.statusCode != 200) {
+            console.error('Unable to send message.');
             console.error(response);
             console.error(error);
         }
