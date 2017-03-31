@@ -24,7 +24,7 @@ app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     if (req.query['hub.verify_token'] === Config.FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
     }
-    console.log('our token: ' + Constants.FB_VERIFY_TOKEN + ' their token: ' + req.query['hub.verify_token']);
+    console.log('our token: ' + Config.FB_VERIFY_TOKEN + ' their token: ' + req.query['hub.verify_token']);
     res.send('Error, wrong token');
 });
 
