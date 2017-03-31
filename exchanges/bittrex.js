@@ -13,7 +13,7 @@ var BittrexHandler = function() {
     };
 
     console.log('BittrexHandler initializing firebase');
-    firebase.initializeApp(firebaseOptions);
+    firebase.initializeApp(firebaseOptions, 'FirebaseBittrex');
 
     var getAPICredentials = function(messengerPSID, callback, error) {
         signInUser(messengerPSID, function () {
