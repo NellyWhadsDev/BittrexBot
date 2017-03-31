@@ -1,5 +1,5 @@
 'use strict'
-var Bittrex = require('./exchanges/bittrex');
+var Bittrex = require('./exchanges/bittrex');//Import this before use-strict since firebase has issues otherwise.
 require('use-strict');
 
 var request = require('request');
