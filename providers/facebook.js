@@ -1,5 +1,5 @@
 var request = require('request');
-var Config = require('./config');
+var Config = require('../config');
 var Constants = require('../constants');
 
 var getEvents = function(body) {
