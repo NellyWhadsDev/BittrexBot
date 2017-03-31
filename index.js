@@ -46,7 +46,7 @@ function receivedPostback(event) {
     var timeStamp = event.timeStamp;
     var payload = event.payload;
 
-    console.log('Received postback for user %d at %d with payload: \n', senderID, timeOfPostback, JSON.stringify(payload));
+    console.log('Received postback for user %d at %d with payload: \n', senderID, timeStamp, JSON.stringify(payload));
 
     switch (payload) {
         case Constants.FB_POSTBACKS.BALLANCE_BUTTON_POSTBACK:
@@ -69,7 +69,7 @@ function receivedMessage(event) {
     var timeStamp = event.timeStamp;
     var message = event.payload;
 
-    console.log('Received message for user %d at %d with message: \n', senderID, timeOfMessage, JSON.stringify(message));
+    console.log('Received message for user %d at %d with message: \n', senderID, timeStamp, JSON.stringify(message));
 
     //TODO: Do this using Wit.ai
     var apiKeyTriggerMessage = 'apiKey: ';
