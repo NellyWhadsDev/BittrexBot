@@ -2,13 +2,9 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
-var bittrex = require('./exchanges/bittrex.js');
-
-var PAGE_ID = '236820823391221';
-
-var VERIFY_TOKEN = '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
-
-var PAGE_ACCESS_TOKEN = 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD';
+var bittrex = require('./exchanges/bittrex');
+var Config = require('./config');
+var Constants = require('./constants');
 
 app.set('port', process.env.PORT || 5000);
 
@@ -16,11 +12,11 @@ app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.redirect('https://bittrex.com');
+    res.redirect(Constants.BITTREX_URL);
 });
 
 app.get('/webhook', function (req, res) {
-    if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
+    if (req.query['hub.verify_token'] === Config.FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
     }
     res.send('Error, wrong token');
@@ -35,7 +31,7 @@ app.post('/webhook', function (req, res) {
         // Iterate over each entry - there may be multiple if batched
         data.entry.forEach(function (entry) {
 
-            if (entry.id != PAGE_ID) {
+            if (entry.id != Config.FB_PAGE_ID) {
                 console.log('Error, invalid page ID: ', entry.id);
                 return;
             }
@@ -127,8 +123,8 @@ function sendTextMessage(recipientId, messageText) {
 
 function callSendAPI(messageData) {
     request({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: PAGE_ACCESS_TOKEN },
+        uri: Constants.FB_SEND_API,
+        qs: { access_token: Config.FB_PAGE_ACCESS_TOKEN },
         method: 'POST',
         json: messageData
     }, function (error, response, body) {

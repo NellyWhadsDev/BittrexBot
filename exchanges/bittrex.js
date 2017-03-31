@@ -4,12 +4,13 @@ var BittrexHandler = function() {
 
     var bittrex = require('node.bittrex.api'),
         firebase = require('firebase'),
-        hasha = require('hasha');
+        hasha = require('hasha'),
+        Config = require('../config');
 
     var firebaseOptions = {
-        apiKey: "AIzaSyCN1Kgxc2POrVr2UM6QogYzxF7yQe9uyDI",
-        authDomain : "bittrexbot.firebaseapp.com",
-        databaseURL: "https://bittrexbot.firebaseio.com"
+        apiKey: Config.FIREBASE_API_KEY,
+        authDomain : Constants.FIREBASE_AUTH_DOMAIN,
+        databaseURL: Constants.FIREBASE_DATABASE_URL
     };
 
     console.log('BittrexHandler initializing firebase');

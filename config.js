@@ -1,0 +1,37 @@
+'use strict';
+
+//Wit.ai
+const WIT_TOKEN = process.env.WIT_TOKEN || '';
+if (!WIT_TOKEN) {
+  throw new Error('Missing WIT_TOKEN');
+}
+
+//Facebook Messenger
+const FB_PAGE_ID = process.env.FB_PAGE_ID || '236820823391221';
+if (!FB_PAGE_ID) {
+    throw new Error('Missing FB_PAGE_ID');
+}
+
+const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN || 'EAAOUJqh081wBAEsZC0ShI3dFQAJITNhZAdRHu6cP26d6xHUG6ZCJZBefT9Hx4ZC1SFZB18MKbToy6b7kQuqP0UkJJA7DyDO1VhRdR0terZC5981oyUFmY5kl2UpejQLCRZBGkkEQqKzTHHDm7m4vG1RIbaf1podjaJUjLcrgwq8KlAZDZD';
+if (!FB_PAGE_ACCESS_TOKEN) {
+    throw new Error('Missing FB_PAGE_ACCESS_TOKEN');
+}
+
+const FB_VERIFY_TOKEN = process.env.FB_VERIFY_TOKEN || '25D5C529FA42A5391CBCD79336560D2B7F3D3DED0D2FFA30119A0A1D7540FC62';
+if (!FB_VERIFY_TOKEN) {
+    throw new Error('Missing FB_VERIFY_TOKEN');
+}
+
+//Firebase
+const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyCN1Kgxc2POrVr2UM6QogYzxF7yQe9uyDI';
+if (!FIREBASE_API_KEY) {
+    throw new Error('Missing FIREBASE_API_KEY');
+}
+
+module.exports = {
+  WIT_TOKEN: WIT_TOKEN,
+  FB_PAGE_ID: FB_PAGE_ID,
+  FB_PAGE_ACCESS_TOKEN: FB_PAGE_ACCESS_TOKEN,
+  FB_VERIFY_TOKEN: FB_VERIFY_TOKEN,
+  FIREBASE_API_KEY: FIREBASE_API_KEY
+}
