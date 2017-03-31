@@ -1,5 +1,3 @@
-'use strict';
-
 //Wit.ai
 const WIT_TOKEN = process.env.WIT_TOKEN = '';
 if (!WIT_TOKEN) {

@@ -1,10 +1,12 @@
+require('use-strict');
+
+var Config = require('./config');
+var Constants = require('./constants');
 var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 var bittrex = require('./exchanges/bittrex');
-var Config = require('./config');
-var Constants = require('./constants');
 
 app.set('port', process.env.PORT || 5000);
 

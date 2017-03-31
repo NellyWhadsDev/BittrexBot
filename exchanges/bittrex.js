@@ -1,7 +1,5 @@
 var BittrexHandler = function() {
 
-    'use strict';
-
     var bittrex = require('node.bittrex.api'),
         firebase = require('firebase'),
         hasha = require('hasha'),

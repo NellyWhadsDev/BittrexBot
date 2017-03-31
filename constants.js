@@ -1,5 +1,3 @@
-'use strict';
-
 //Wit.ai
 const WIT_URL = '';
 
