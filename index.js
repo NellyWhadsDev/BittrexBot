@@ -15,14 +15,14 @@ app.get('/', function (req, res) {
     res.redirect(Constants.BITTREX_URL);
 });
 
-app.get('/webhook', function (req, res) {
+app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     if (req.query['hub.verify_token'] === Config.FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
     }
     res.send('Error, wrong token');
 });
 
-app.post('/webhook', function (req, res) {
+app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     var data = req.body;
 
     // Make sure this is our page's subscription
@@ -58,7 +58,7 @@ function receivedPostback(event) {
     console.log('Received postback for user %d and page %d at %d with payload: \n', senderID, recipientID, timeOfMessage, JSON.stringify(payload));
 
     switch (payload) {
-        case 'BALANCE_BUTTON_POSTBACK':
+        case Constants.FB_POSTBACKS.BALLANCE_BUTTON_POSTBACK:
             bittrex.init(senderID, function() {  
                 bittrex.getbalances(function (res) {
                     if (res.success == true) {
@@ -82,6 +82,7 @@ function receivedMessage(event) {
     console.log('Received message for user %d and page %d at %d with message: \n', senderID, recipientID, timeOfMessage, JSON.stringify(message));
 
     var messageText = message.text;
+    //TODO: Do this using Wit.ai
     var apiKeyTriggerMessage = 'apiKey: ';
     var apiSecretTriggerMessage = 'apiSecret: ';
     if (messageText) {

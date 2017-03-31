@@ -5,7 +5,8 @@ var BittrexHandler = function() {
     var bittrex = require('node.bittrex.api'),
         firebase = require('firebase'),
         hasha = require('hasha'),
-        Config = require('../config');
+        Config = require('../config')
+        Constants = require('../constants');
 
     var firebaseOptions = {
         apiKey: Config.FIREBASE_API_KEY,
@@ -19,7 +20,7 @@ var BittrexHandler = function() {
     var getAPICredentials = function(messengerPSID, callback, error) {
         signInUser(messengerPSID, function () {
             var firebaseUID = firebase.auth().currentUser.uid;
-            firebase.database().ref('users/' + firebaseUID).once('value', function(snapshot) {
+            firebase.database().ref(Constants.FIREBASE_DATABASE_USERS_SUB_URL + firebaseUID).once('value', function(snapshot) {
                 var apiCredentials = snapshot.val();
                 signOutUser(firebaseUID, function() {
                     if (apiCredentials != null && apiCredentials.key != null && apiCredentials.secret != null)
@@ -40,7 +41,7 @@ var BittrexHandler = function() {
     var setAPIKey = function(messengerPSID, apiKey, callback, error) {
         signInUser(messengerPSID, function() {
             var firebaseUID = firebase.auth().currentUser.uid;
-            firebase.database().ref('users/' + firebaseUID + '/key').set(apiKey).then( function() {
+            firebase.database().ref(Constants.FIREBASE_DATABASE_USERS_SUB_URL + firebaseUID + Constants.FIREBASE_DATABASE_KEY_SUB_URL).set(apiKey).then( function() {
                 signOutUser(firebaseUID, function() {callback()}, function() {error()});
             }, function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
@@ -52,7 +53,7 @@ var BittrexHandler = function() {
     var setAPISecret = function(messengerPSID, apiSecret, callback, error) {
         signInUser(messengerPSID, function() {
             var firebaseUID = firebase.auth().currentUser.uid;
-            firebase.database().ref('users/' + firebaseUID + '/secret').set(apiSecret).then( function() {
+            firebase.database().ref(Constants.FIREBASE_DATABASE_USERS_SUB_URL + firebaseUID + Constants.FIREBASE_DATABASE_SECRET_SUB_URL).set(apiSecret).then( function() {
                 signOutUser(firebaseUID, function() {callback()}, function() {error()});
             }, function(databaseError) {
                 console.log('BittrexHandler firebase set error for user %s: ', firebaseUID, databaseError);
