@@ -1,10 +1,11 @@
 var BittrexHandler = function() {
 
-    var bittrex = require('node.bittrex.api'),
-        firebase = require('firebase'),
-        hasha = require('hasha'),
+    var 
         Config = require('../config'),
-        Constants = require('../constants');
+        Constants = require('../constants'),
+        bittrex = require('node.bittrex.api'),
+        firebase = require('firebase'),
+        hasha = require('hasha');
 
     var firebaseOptions = {
         apiKey: Config.FIREBASE_API_KEY,
