@@ -39,7 +39,7 @@ var getEvents = function(body) {
 
 var sendTextMessage = function(recipientID, messageText) {
     callSendAPI({
-        recipient: { id: recipientId },
+        recipient: { id: recipientID },
         message: { text: messageText }
     });
 }
