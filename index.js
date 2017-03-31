@@ -76,6 +76,7 @@ function receivedMessage(event) {
     var apiKeyTriggerMessage = 'apiKey: ';
     var apiSecretTriggerMessage = 'apiSecret: ';
     if (message) {
+        console.log('here is the message: ', message);
         if(message.startsWith(apiKeyTriggerMessage)) {
             bittrex.setkey(senderID, message.substr(apiKeyTriggerMessage.length, message.length), function() {
                 sendTextMessage(senderID, 'API Key Updated!');
