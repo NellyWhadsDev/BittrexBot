@@ -14,9 +14,6 @@ var VERIFY_TOKEN = Constants.FB_VERIFY_TOKEN;
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
-app.listen(app.get('port'), function () {
-    console.log('running on port', app.get('port'))
-});
 app.use(bodyParser.json());
 
 //Home page
@@ -111,3 +108,7 @@ function sendErrorMessage(recipientId) {
 function sendTextMessage(recipientId, messageText) {
     FB.sendTextMessage(recipientId, messageText);
 }
+
+app.listen(app.get('port'), function () {
+    console.log('running on port', app.get('port'))
+});
