@@ -26,7 +26,7 @@ var getEvents = function(body) {
                     if (event.postback && event.postback.payload) {
                         newEvent.type = Constants.FB_EVENT_TYPE.MESSAGE;
                         newEvent.payload = event.postback.payload;
-                    } else if (event.message && event.message.length > 0) {
+                    } else if (event.message && event.message.text.length > 0) {
                         newEvent.type = Constants.FB_EVENT_TYPE.MESSAGE;
                         newEvent.payload = event.message;
                     }
