@@ -40,6 +40,7 @@ app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
             else if (event.type === Constants.FB_EVENT_TYPE.POSTBACK) {receivedPostback(event)}
         });
     }
+    res.sendStatus(200);
 });
 
 function receivedPostback(event) {
