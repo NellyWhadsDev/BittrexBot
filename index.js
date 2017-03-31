@@ -10,6 +10,8 @@ var Constants = require('./constants');
 var FB = require('./providers/facebook');
 // var Bittrex = require('./exchanges/bittrex');
 
+var VERIFY_TOKEN = Constants.FB_VERIFY_TOKEN;
+
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json());
@@ -21,7 +23,7 @@ app.get('/', function (req, res) {
 
 //FB Page Verification
 app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
-    if (req.query['hub.verify_token'] === Constants.FB_VERIFY_TOKEN) {
+    if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
     }
     console.log('our token: ' + Constants.FB_VERIFY_TOKEN + ' their token: ' + req.query['hub.verify_token']);
