@@ -7,7 +7,8 @@ var express = require('express');
 
 var Config = require('./config');
 var Constants = require('./constants');
-var FB = require('./providers/facebook')
+var FB = require('./providers/facebook');
+var Bittrex = require('./exchanges/bittrex');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -50,8 +51,8 @@ function receivedPostback(event) {
 
     switch (payload) {
         case Constants.FB_POSTBACKS.BALLANCE_BUTTON_POSTBACK:
-            bittrex.init(senderID, function() {  
-                bittrex.getbalances(function (res) {
+            Bittrex.init(senderID, function() {  
+                Bittrex.getbalances(function (res) {
                     if (res.success == true) {
                         sendBalanceButtonMessage(senderID, res);
                     } else {sendErrorMessage(senderID)}
