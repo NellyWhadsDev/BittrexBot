@@ -31,6 +31,7 @@ app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
 
 //FB Recieve Messages
 app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
+    console.log('Got here!');
     var events = FB.getEvents(req.body);
 
     if (events) {
