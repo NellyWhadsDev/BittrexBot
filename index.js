@@ -33,15 +33,12 @@ app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
 app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     var events = FB.getEvents(req.body);
     
-    console.log('Got here too!');
     if (events) {
         events.forEach(function(event) {
-            console.log('Got event: ', event);
             if (event.type === Constants.FB_EVENT_TYPE.MESSAGE) {receivedMessage(event)}
             else if (event.type === Constants.FB_EVENT_TYPE.POSTBACK) {receivedPostback(event)}
         });
     }
-    console.log('Sending good status');
     res.sendStatus(200);
 });
 

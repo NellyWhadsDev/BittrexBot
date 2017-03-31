@@ -21,6 +21,7 @@ var getEvents = function(body) {
                         timeStamp: event.timestamp,
                         payload: null
                     };
+                    console.log('Got event: ', event);
 
                     if (event.postback && event.postback.payload) {
                         newEvent.type = Constants.FB_EVENT_TYPE.MESSAGE;
