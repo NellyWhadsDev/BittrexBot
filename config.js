@@ -1,5 +1,5 @@
 //Wit.ai
-const WIT_TOKEN = process.env.WIT_TOKEN = '';
+const WIT_TOKEN = process.env.WIT_TOKEN || '';
 if (!WIT_TOKEN) {
   throw new Error('Missing WIT_TOKEN');
 }
