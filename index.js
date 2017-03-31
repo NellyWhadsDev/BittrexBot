@@ -2,7 +2,7 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
-var bittrexHandler = require('./bittrexHandler.js');
+var bittrex = require('./exchanges/bittrex.js');
 
 var PAGE_ID = '236820823391221';
 
@@ -63,8 +63,8 @@ function receivedPostback(event) {
 
     switch (payload) {
         case 'BALANCE_BUTTON_POSTBACK':
-            bittrexHandler.init(senderID, function() {  
-                bittrexHandler.getbalances(function (res) {
+            bittrex.init(senderID, function() {  
+                bittrex.getbalances(function (res) {
                     if (res.success == true) {
                         sendBalanceButtonMessage(senderID, res);
                     } else {sendErrorMessage(senderID)}
@@ -90,11 +90,11 @@ function receivedMessage(event) {
     var apiSecretTriggerMessage = 'apiSecret: ';
     if (messageText) {
         if(messageText.startsWith(apiKeyTriggerMessage)) {
-            bittrexHandler.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), function() {
+            bittrex.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), function() {
                 sendTextMessage(senderID, 'API Key Updated!');
             }, function() {sendErrorMessage(senderID)});
         } else if(messageText.startsWith(apiSecretTriggerMessage)) {
-            bittrexHandler.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), function() {
+            bittrex.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), function() {
                 sendTextMessage(senderID, 'API Secret Updated!')
             }, function() {sendErrorMessage(senderID)});
         } else {
