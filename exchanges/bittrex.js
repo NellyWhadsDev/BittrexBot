@@ -6,14 +6,12 @@ var BittrexHandler = function() {
         firebase = require('firebase'),
         hasha = require('hasha');
 
-    var firebaseOptions = {
+    console.log('BittrexHandler initializing firebase');
+    firebase.initializeApp({
         apiKey: Config.FIREBASE_API_KEY,
         authDomain : Constants.FIREBASE_AUTH_DOMAIN,
         databaseURL: Constants.FIREBASE_DATABASE_URL
-    };
-
-    console.log('BittrexHandler initializing firebase');
-    firebase.initializeApp(firebaseOptions, 'FirebaseBittrex');
+    });
 
     var getAPICredentials = function(messengerPSID, callback, error) {
         signInUser(messengerPSID, function () {
