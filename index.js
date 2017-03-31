@@ -8,7 +8,7 @@ var express = require('express');
 var Config = require('./config');
 var Constants = require('./constants');
 var FB = require('./providers/facebook');
-var Bittrex = require('./exchanges/bittrex');
+// var Bittrex = require('./exchanges/bittrex');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
