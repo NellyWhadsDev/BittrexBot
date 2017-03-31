@@ -1,7 +1,7 @@
 var BittrexHandler = function() {
 
     var bittrex = require('node.bittrex.api'),
-        // firebase = require('firebase'),
+        firebase = require('firebase'),
         hasha = require('hasha'),
         Config = require('../config'),
         Constants = require('../constants');
