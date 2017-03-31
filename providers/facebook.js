@@ -44,12 +44,12 @@ var sendTextMessage = function(recipientID, messageText) {
     });
 }
 
-var callSendAPI = function(recipientID, payload) {
+var callSendAPI = function(payload) {
     request({
         uri: Constants.FB_SEND_API,
         qs: { access_token: Config.FB_PAGE_ACCESS_TOKEN },
         method: 'POST',
-        json: messageData
+        json: payload
     }, function (error, response, body) {
         if (error || response.statusCode != 200) {
             console.error('Unable to send message.');
