@@ -1,22 +1,27 @@
+'use strict'
 require('use-strict');
 
-var Config = require('./config');
-var Constants = require('./constants');
 var request = require('request');
 var bodyParser = require('body-parser');
 var express = require('express');
+
+var Config = require('./config');
+var Constants = require('./constants');
+var FB = require('./providers/facebook')
+
 var app = express();
-var bittrex = require('./exchanges/bittrex');
-
 app.set('port', process.env.PORT || 5000);
-
-// Process application/json
+app.listen(app.get('port'), function () {
+    console.log('running on port', app.get('port'))
+});
 app.use(bodyParser.json());
 
+//Home page
 app.get('/', function (req, res) {
     res.redirect(Constants.BITTREX_URL);
 });
 
+//FB Page Verification
 app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     if (req.query['hub.verify_token'] === Config.FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
@@ -24,40 +29,24 @@ app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     res.send('Error, wrong token');
 });
 
+//FB Recieve Messages
 app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
-    var data = req.body;
+    var events = FB.getEvents(req.body);
 
-    // Make sure this is our page's subscription
-    if (data.object === 'page') {
-
-        // Iterate over each entry - there may be multiple if batched
-        data.entry.forEach(function (entry) {
-
-            if (entry.id != Config.FB_PAGE_ID) {
-                console.log('Error, invalid page ID: ', entry.id);
-                return;
-            }
-
-            // Iterate over each messaging event
-            entry.messaging.forEach(function (event) {
-                if (event.postback) { receivedPostback(event); }
-                else if (event.message) { receivedMessage(event); }
-                else { 
-                    console.log('Webhook received unknown event: ', event); 
-                }
-            });
+    if (events) {
+        events.forEach(function(event) {
+            if (event.type === Constants.FB_EVENT_TYPE.MESSAGE) {receivedMessage(event)}
+            else if (event.type === Constants.FB_EVENT_TYPE.POSTBACK) {receivedPostback(event)}
         });
-        res.sendStatus(200);
     }
 });
 
 function receivedPostback(event) {
-    var senderID = event.sender.id;
-    var recipientID = event.recipient.id;
-    var timeOfMessage = event.timestamp;
-    var payload = event.postback.payload;
+    var senderID = event.senderID;
+    var timeStamp = event.timeStamp;
+    var payload = event.payload;
 
-    console.log('Received postback for user %d and page %d at %d with payload: \n', senderID, recipientID, timeOfMessage, JSON.stringify(payload));
+    console.log('Received postback for user %d at %d with payload: \n', senderID, timeOfPostback, JSON.stringify(payload));
 
     switch (payload) {
         case Constants.FB_POSTBACKS.BALLANCE_BUTTON_POSTBACK:
@@ -76,28 +65,26 @@ function receivedPostback(event) {
 }
 
 function receivedMessage(event) {
-    var senderID = event.sender.id;
-    var recipientID = event.recipient.id;
-    var timeOfMessage = event.timestamp;
-    var message = event.message;
+    var senderID = event.senderID;
+    var timeStamp = event.timeStamp;
+    var message = event.payload;
 
-    console.log('Received message for user %d and page %d at %d with message: \n', senderID, recipientID, timeOfMessage, JSON.stringify(message));
+    console.log('Received message for user %d at %d with message: \n', senderID, timeOfMessage, JSON.stringify(message));
 
-    var messageText = message.text;
     //TODO: Do this using Wit.ai
     var apiKeyTriggerMessage = 'apiKey: ';
     var apiSecretTriggerMessage = 'apiSecret: ';
-    if (messageText) {
-        if(messageText.startsWith(apiKeyTriggerMessage)) {
-            bittrex.setkey(senderID, messageText.substr(apiKeyTriggerMessage.length, messageText.length), function() {
+    if (message) {
+        if(message.startsWith(apiKeyTriggerMessage)) {
+            bittrex.setkey(senderID, message.substr(apiKeyTriggerMessage.length, message.length), function() {
                 sendTextMessage(senderID, 'API Key Updated!');
             }, function() {sendErrorMessage(senderID)});
-        } else if(messageText.startsWith(apiSecretTriggerMessage)) {
-            bittrex.setsecret(senderID, messageText.substr(apiSecretTriggerMessage.length, messageText.length), function() {
+        } else if(message.startsWith(apiSecretTriggerMessage)) {
+            bittrex.setsecret(senderID, message.substr(apiSecretTriggerMessage.length, message.length), function() {
                 sendTextMessage(senderID, 'API Secret Updated!')
             }, function() {sendErrorMessage(senderID)});
         } else {
-            sendTextMessage(senderID, 'Echo!\n' + messageText);
+            sendTextMessage(senderID, 'Echo!\n' + message);
         }
     } else if (messageAttachments) {
         sendTextMessage(senderID, 'Message with attachment received');
@@ -118,27 +105,5 @@ function sendErrorMessage(recipientId) {
 }
 
 function sendTextMessage(recipientId, messageText) {
-    callSendAPI({
-        recipient: { id: recipientId },
-        message: { text: messageText }
-    });
+    FB.sendTextMessage(recipientId, messageText);
 }
-
-function callSendAPI(messageData) {
-    request({
-        uri: Constants.FB_SEND_API,
-        qs: { access_token: Config.FB_PAGE_ACCESS_TOKEN },
-        method: 'POST',
-        json: messageData
-    }, function (error, response, body) {
-        if (error || response.statusCode != 200) {
-            console.error('Unable to send message.');
-            console.error(response);
-            console.error(error);
-        }
-    });
-}
-
-app.listen(app.get('port'), function () {
-    console.log('running on port', app.get('port'))
-});
