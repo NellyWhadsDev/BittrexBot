@@ -23,9 +23,9 @@ app.get('/', function (req, res) {
 app.get(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
     if (req.query['hub.verify_token'] === Config.FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
+    } else {
+        res.send('Error, wrong token');
     }
-    console.log('our token: ' + Config.FB_VERIFY_TOKEN + ' their token: ' + req.query['hub.verify_token']);
-    res.send('Error, wrong token');
 });
 
 //FB Recieve Messages
