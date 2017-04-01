@@ -1,0 +1,28 @@
+{
+  "name": "BittrexBot",
+  "description": "A Facebook Messenger Bittrex Client",
+  "repository": "https://github.com/NellyWhadsDev/BittrexBot",
+  "keywords": ["messenger", "bittrex", "wit", "bot"],
+  "env": {
+    "WIT_TOKEN": {
+      "description": "Wint.ai Server Access Token",
+      "required": true
+    },
+    "FB_PAGE_ID": {
+      "description": "Facebook Page ID",
+      "required": true
+    },
+    "FB_PAGE_ACCESS_TOKEN": {
+      "description": "Facebook Page Access Token",
+      "required": true
+    },
+    "FB_VERIFY_TOKEN": {
+      "description": "Facebook Verification Token",
+      "required": true
+    },
+    "FIREBASE_API_KEY": {
+      "description": "Firebase Auth/Database API Key",
+      "required": true
+    }
+  }
+}
