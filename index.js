@@ -1,6 +1,4 @@
-'use strict'
-var Bittrex = require('./exchanges/bittrex');//Import this before use-strict since firebase has issues otherwise.
-require('use-strict');
+'use strict';
 
 var request = require('request');
 var bodyParser = require('body-parser');
@@ -8,6 +6,7 @@ var express = require('express');
 
 var Config = require('./config');
 var Constants = require('./constants');
+var Bittrex = require('./exchanges/bittrex');
 var FB = require('./providers/facebook');
 
 var app = express();

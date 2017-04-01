@@ -1,4 +1,5 @@
 var BittrexHandler = function() {
+    'use strict';
 
     var Config = require('../config'),
         Constants = require('../constants'),

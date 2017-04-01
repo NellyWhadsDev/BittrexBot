@@ -1,3 +1,5 @@
+'use strict';
+
 var request = require('request');
 var Config = require('../config');
 var Constants = require('../constants');
