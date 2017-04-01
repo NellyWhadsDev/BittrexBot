@@ -12,14 +12,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
 
 # Wit.ai Coins entity setup example
 curl -XPUT 'https://api.wit.ai/entities/Coins?v=20160526' \
-  -H 'Authorization: Bearer $TOKEN' \
+  -H 'Authorization: Bearer TDIZRC5SMF3LLXGVKNXRGPANUDCTPINU' \
   -H 'Content-Type: application/json' \
-  -d '{"doc":"Here are the supported coins",
-       "values":[
-       {"value":"BTC",
-        "expressions":["BTC",
-                       "BITCOIN"]},
-       {"value":"DAR",
-       "expressions":["DAR",
-                      "DARIUS"]}]}'
+  -d '@WitCoinsEntity.json'
                       
