@@ -107,11 +107,9 @@ var BittrexHandler = (function () {
       bittrex.getmarkets(function (data) {
         if (data.success === true) {
           var markets = {}
-          data.result.forEach(function (marketName) {
-            console.log(marketName)
-            markets[marketName] = marketName.toString()
+          data.result.forEach(function (market) {
+            markets[market.MarketName] = true
           })
-          console.dir(markets, {depth: null})
           uploadMarkets(markets)
         }
         callback(data)
