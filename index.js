@@ -42,6 +42,13 @@ app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
   res.sendStatus(200)
 })
 
+// Timed Update of Bittrex Markets
+setInterval(function () {
+  Bittrex.updateMarkets(function () {
+    console.log('Updated Bittrex Markets')
+  })
+}, Constants.BITTREX_NEW_MARKET_UPDATE_INTERVAL)
+
 function receivedPostback (event) {
   var senderID = event.senderID
   var timeStamp = event.timeStamp

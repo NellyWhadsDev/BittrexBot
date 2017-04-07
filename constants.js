@@ -5,6 +5,8 @@ if (WIT_URL) ;
 // Bittrex
 const BITTREX_URL = 'https://bittrex.com'
 
+const BITTREX_NEW_MARKET_UPDATE_INTERVAL = 5 * 60 * 1000 // 5 minutes
+
 // Facebook Messenger
 const FB_SEND_API = 'https://graph.facebook.com/v2.6/me/messages'
 
@@ -36,6 +38,7 @@ const FIREBASE_DATABASE_MARKETS_SUB_URL = 'markets/'
 
 module.exports = {
   BITTREX_URL: BITTREX_URL,
+  BITTREX_NEW_MARKET_UPDATE_INTERVAL: BITTREX_NEW_MARKET_UPDATE_INTERVAL,
   FB_SEND_API: FB_SEND_API,
   FB_WEBHOOK_SUB_URL: FB_WEBHOOK_SUB_URL,
   FB_EVENT_TYPE: FB_EVENT_TYPE,
