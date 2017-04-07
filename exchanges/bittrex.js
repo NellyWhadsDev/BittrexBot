@@ -108,6 +108,7 @@ var BittrexHandler = (function () {
         if (data.success === true) {
           var markets = {}
           data.result.forEach(function (marketName) {
+            console.log(marketName)
             markets[marketName] = marketName.toString()
           })
           console.dir(markets, {depth: null})
