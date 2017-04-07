@@ -81,20 +81,11 @@ var BittrexHandler = (function () {
     })
   }
 
-  var uploadMarkets = function (marketList) {
-    console.log(marketList)
-    firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL).once('value', function (snapshot) {
-      console.log(snapshot.val())
-      marketList.forEach(function (marketName) {
-        if (!snapshot.hasChild(marketName)) {
-          console.log('BittrexHandler firebase adding market: ', marketName)
-          firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL + marketName + '/').set(true).catch(function (error) {
-            console.log('BittrexHandler firebase set market error: ', error)
-          })
-        }
-      })
-    }).catch(function (error) {
-      console.log('BittrexHandler firebase read market error: ', error)
+  var uploadMarkets = function (markets) {
+    console.log(markets)
+
+    firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL).set(markets).catch(function (error) {
+      console.log('BittrexHandler firebase set market error: ', error)
     })
   }
 
@@ -117,11 +108,11 @@ var BittrexHandler = (function () {
     updateMarkets: function (callback) {
       bittrex.getmarkets(function (data) {
         if (data.success === true) {
-          var marketList = []
-          data.result.forEach(function (market) {
-            marketList.push(market.MarketName)
+          var markets = {}
+          data.result.forEach(function (marketName) {
+            markets[marketName] = true
           })
-          uploadMarkets(marketList)
+          uploadMarkets(markets)
         }
         callback(data)
       })
