@@ -109,13 +109,14 @@ var BittrexHandler = (function () {
     },
     updateMarkets: function (callback) {
       bittrex.getmarkets(function (data) {
-        if (data.success && data.result.isArray()) {
+        if (data.success === true && data.result.isArray()) {
           var marketList = []
           data.result.forEach(function (market) {
             marketList.push(market.MarketName)
           })
           uploadMarkets(marketList)
         }
+        callback(data)
       })
     },
     sendCustomRequest: function (requestString, callback, credentials) {

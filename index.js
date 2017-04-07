@@ -59,6 +59,13 @@ function receivedPostback (event) {
         })
       }, function () { sendErrorMessage(senderID) })
       break
+    case Constants.FB_POSTBACKS.UPDATE_MARKETS_POSTBACK:
+      Bittrex.updateMarkets(function (res) {
+        if (res.success === true) {
+          sendTextMessage(senderID, 'Updated Markets!')
+        }
+      })
+      break
     default:
       console.log('Unknown payload in postback: ', event)
       sendErrorMessage(senderID)
