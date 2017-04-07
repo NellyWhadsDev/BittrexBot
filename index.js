@@ -2,6 +2,7 @@
 
 var bodyParser = require('body-parser')
 var express = require('express')
+var http = require('http')
 
 var Config = require('./config')
 var Constants = require('./constants')
@@ -46,6 +47,8 @@ app.post(Constants.FB_WEBHOOK_SUB_URL, function (req, res) {
 setInterval(function () {
   Bittrex.updateMarkets(function () {
     console.log('Updated Bittrex Markets')
+    // Keep server awake
+    http.get('http://bittrexbot.herokuapp.com')
   })
 }, Constants.BITTREX_NEW_MARKET_UPDATE_INTERVAL)
 
