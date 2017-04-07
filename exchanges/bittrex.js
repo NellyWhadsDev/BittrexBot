@@ -83,7 +83,7 @@ var BittrexHandler = (function () {
   }
 
   var uploadMarkets = function (markets) {
-    console.log(util.inspect(markets, false, null))
+    console.dir(markets, {depth: null})
 
     firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL).set(markets).catch(function (error) {
       console.log('BittrexHandler firebase set market error: ', error)
@@ -111,7 +111,7 @@ var BittrexHandler = (function () {
         if (data.success === true) {
           var markets = {}
           data.result.forEach(function (marketName) {
-            markets['"' + marketName + '"'] = true
+            markets[marketName] = true
           })
           uploadMarkets(markets)
         }
