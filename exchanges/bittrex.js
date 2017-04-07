@@ -111,7 +111,7 @@ var BittrexHandler = (function () {
         if (data.success === true) {
           var markets = {}
           data.result.forEach(function (marketName) {
-            markets[marketName.toString()] = true
+            markets['"' + marketName + '"'] = true
           })
           uploadMarkets(markets)
         }
