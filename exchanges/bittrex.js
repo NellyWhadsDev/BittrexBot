@@ -88,9 +88,13 @@ var BittrexHandler = (function () {
       marketList.forEach(function (marketName) {
         if (!snapshot.hasChild(marketName)) {
           console.log('BittrexHandler firebase adding market: ', marketName)
-          firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL + marketName + '/').set(true)
+          firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL + marketName + '/').set(true).catch(function (error) {
+            console.log('BittrexHandler firebase set market error: ', error)
+          })
         }
       })
+    }).catch(function (error) {
+      console.log('BittrexHandler firebase read market error: ', error)
     })
   }
 
