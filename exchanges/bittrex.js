@@ -6,6 +6,7 @@ var BittrexHandler = (function () {
   var bittrex = require('node.bittrex.api')
   var firebase = require('firebase')
   var hasha = require('hasha')
+  var util = require('util')
 
   console.log('BittrexHandler initializing firebase')
   firebase.initializeApp({
@@ -82,7 +83,7 @@ var BittrexHandler = (function () {
   }
 
   var uploadMarkets = function (markets) {
-    console.log('Markets: %j', markets)
+    console.log(util.inspect(markets, false, null))
 
     firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL).set(markets).catch(function (error) {
       console.log('BittrexHandler firebase set market error: ', error)
