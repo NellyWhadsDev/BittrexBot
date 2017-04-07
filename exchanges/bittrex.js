@@ -81,6 +81,16 @@ var BittrexHandler = (function () {
     })
   }
 
+  var uploadMarkets = function (marketList) {
+    firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL).once('value', function (snapshot) {
+      marketList.forEach(function (marketName) {
+        if (!snapshot.hasChild(marketName)) {
+          firebase.database().ref(Constants.FIREBASE_DATABASE_MARKETS_SUB_URL + marketName + '/').set(true)
+        }
+      })
+    })
+  }
+
   return {
     init: function (messengerPSID, callback, error) {
       getAPICredentials(messengerPSID, function (credentials) {
@@ -96,6 +106,17 @@ var BittrexHandler = (function () {
     },
     setsecret: function (messengerPSID, apiSecret, callback, error) {
       setAPISecret(messengerPSID, apiSecret, function () { callback() }, function () { error() })
+    },
+    updateMarkets: function (callback) {
+      bittrex.getmarkets(function (data) {
+        if (data.success && data.result.isArray()) {
+          var marketList = []
+          data.result.forEach(function (market) {
+            marketList.push(market.MarketName)
+          })
+          uploadMarkets(marketList)
+        }
+      })
     },
     sendCustomRequest: function (requestString, callback, credentials) {
       bittrex.sendCustomRequest(requestString, callback, credentials)
